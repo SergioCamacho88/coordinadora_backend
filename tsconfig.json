@@ -6,7 +6,9 @@
       "esModuleInterop": true,
       "outDir": "dist",
       "baseUrl": "src",
-      "resolveJsonModule": true
+      "resolveJsonModule": true,
+      "typeRoots": ["./node_modules/@types", "./src/types"]
+
     },
     "include": ["src"]
   }
