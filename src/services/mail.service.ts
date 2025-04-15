@@ -1,5 +1,6 @@
 import { Resend } from 'resend'
 import { buildOrderConfirmationEmail } from '../templates/orderConfirmationEmail'
+import { buildOrderAssignedEmail } from '../templates/orderAssignedEmail'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -21,5 +22,31 @@ export const sendConfirmationEmail = async (to: string, orderInfo: any) => {
     }
   } catch (err) {
     console.error('❌ Error inesperado en Resend:', err)
+  }
+}
+
+export const sendAssignmentEmail = async (
+  to: string,
+  order: any,
+  ruta: any,
+  transportista: any
+) => {
+  try {
+    const html = buildOrderAssignedEmail(order, ruta, transportista)
+
+    const { data, error } = await resend.emails.send({
+      from: 'Coordinadora <no-responder-coordinadora@phdigital.app>',
+      to,
+      subject: 'Tu envío fue asignado',
+      html
+    })
+
+    if (error) {
+      console.error('❌ Error al enviar correo de asignación:', error)
+    } else {
+      console.log('✅ Correo de asignación enviado:', data?.id)
+    }
+  } catch (err) {
+    console.error('❌ Error inesperado en envío de asignación:', err)
   }
 }

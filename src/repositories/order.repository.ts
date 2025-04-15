@@ -20,3 +20,18 @@ export const createOrder = async (order: {
     order.destinationAddress
   ])
 }
+
+export const getOrders = async (status?: string): Promise<any[]> => {
+  let query = `SELECT * FROM orders`
+  const params: any[] = []
+
+  if (status) {
+    query += ` WHERE status = ?`
+    params.push(status)
+  }
+
+  query += ` ORDER BY created_at DESC`
+
+  const [rows]: any = await db.query(query, params)
+  return rows
+}

@@ -5,7 +5,8 @@ import { redisClient } from './config/redis'
 import authRoutes from './routes/auth.routes'
 import protectedRoutes from './routes/protected.routes'
 import orderRoutes from './routes/order.routes'
-
+import rutaRoutes from './routes/ruta.routes'
+import transportistaRoutes from './routes/transportista.routes'
 
 
 dotenv.config()
@@ -18,6 +19,8 @@ app.get('/', (req, res) => {
 app.use('/api', protectedRoutes)
 app.use('/api', orderRoutes)
 app.use('/api/auth', authRoutes)
+app.use('/api', rutaRoutes)
+app.use('/api', transportistaRoutes)
 
 const PORT = process.env.PORT || 3000
 

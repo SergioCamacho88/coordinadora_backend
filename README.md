@@ -43,6 +43,23 @@ Repositorio: 👉 [https://github.com/SergioCamacho88/coordinadora_backend](http
 
 ---
 
+### ✅ HU3 - Asignación de rutas a los envíos
+
+- Ruta protegida solo para admin: `POST /api/orders/:id/assign`
+- Validación de:
+  - existencia de la orden y estado "En espera"
+  - disponibilidad y capacidad del transportista
+  - existencia de la ruta
+- Actualiza el estado de la orden a `"En tránsito"`
+- Envía un correo de asignación con resumen
+- Endpoints adicionales para el dashboard:
+  - `GET /api/orders?status=En espera` → listar órdenes por estado
+  - `GET /api/rutas` → listar rutas
+  - `GET /api/transportistas?disponible=true` → listar transportistas disponibles
+- Middleware `isAdmin` protege todos los endpoints del dashboard
+
+---
+
 ## ⚙️ Configuración local
 
 ### 1. Clona el repositorio
@@ -108,28 +125,32 @@ npm run dev
 
 ---
 
-## 🧪 Probar creación de órdenes (HU2)
+## 🧪 Pruebas útiles
 
-**Ruta:** `POST http://localhost:3000/api/orders`  
-**Header:** `Authorization: Bearer <tu_token>`  
-**Body:**
-```json
-{
-  "weight": 5.5,
-  "dimensions": "40x30x20",
-  "productType": "Electrónica",
-  "destinationAddress": "Carrera 15 # 80 - 20, Bogotá"
-}
+### Crear orden (usuario)
+```http
+POST /api/orders
+Authorization: Bearer <token>
 ```
 
-✅ Respuesta:
-```json
-{
-  "message": "Orden creada correctamente"
-}
+### Asignar orden (admin)
+```http
+POST /api/orders/:id/assign
+Authorization: Bearer <admin_token>
 ```
 
-📧 El usuario recibe un correo de confirmación visualmente optimizado.
+### Filtrar órdenes
+```http
+GET /api/orders?status=En espera
+Authorization: Bearer <admin_token>
+```
+
+### Listar rutas y transportistas
+```http
+GET /api/rutas
+GET /api/transportistas?disponible=true
+Authorization: Bearer <admin_token>
+```
 
 ---
 
@@ -140,7 +161,7 @@ src/
 ├── config/              # Conexiones a MySQL, Redis
 ├── controllers/         # HTTP handlers
 ├── routes/              # Rutas Express
-├── middlewares/         # Autenticación, validación
+├── middlewares/         # Autenticación, validación de roles
 ├── usecases/            # Lógica de negocio
 ├── repositories/        # Consultas a BD
 ├── services/            # Emails, JWT, hashing

@@ -53,3 +53,13 @@ CREATE TABLE order_assignments (
   FOREIGN KEY (ruta_id) REFERENCES rutas(id) ON DELETE CASCADE,
   FOREIGN KEY (transportista_id) REFERENCES transportistas(id) ON DELETE CASCADE
 );
+
+INSERT INTO rutas (name, description) VALUES
+  ('Ruta Norte', 'Cobertura por la zona norte de la ciudad'),
+  ('Ruta Sur', 'Entrega en zona sur, incluyendo barrios periféricos'),
+  ('Ruta Centro', 'Recorrido por zona centro y empresarial');
+
+INSERT INTO transportistas (name, capacity, is_available) VALUES
+  ('Carlos López', 100, TRUE),
+  ('Marta Rivera', 80, TRUE),
+  ('Julián Torres', 120, TRUE);
