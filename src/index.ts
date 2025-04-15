@@ -4,7 +4,7 @@ import { db } from './config/mysql'
 import { redisClient } from './config/redis'
 import authRoutes from './routes/auth.routes'
 import protectedRoutes from './routes/protected.routes'
-
+import orderRoutes from './routes/order.routes'
 
 
 
@@ -16,6 +16,7 @@ app.get('/', (req, res) => {
   res.send('API funcionando 🚀')
 })
 app.use('/api', protectedRoutes)
+app.use('/api', orderRoutes)
 app.use('/api/auth', authRoutes)
 
 const PORT = process.env.PORT || 3000
