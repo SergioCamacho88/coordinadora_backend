@@ -7,7 +7,9 @@ import { assignOrderController } from '../controllers/assignOrder.controller'
 import { assignOrderSchema } from '../schemas/assignOrderSchema'
 import { getOrdersController } from '../controllers/getOrders.controller'
 import { isAdmin } from '../middlewares/roleMiddleware'
-
+import { getOrderStatusController } from '../controllers/orderStatus.controller'
+import { updateOrderStatusController } from '../controllers/updateOrderStatus.controller'
+import { getOrderHistoryController } from '../controllers/getOrderHistory.controller'
 
 
 const router = Router()
@@ -33,4 +35,24 @@ router.get(
   isAdmin,
   getOrdersController
 )
+
+router.get(
+  '/orders/:id/status',
+  authenticate, // usuarios autenticados pueden consultar sus órdenes
+  getOrderStatusController
+)
+
+router.put(
+  '/orders/:id/status',
+  authenticate,
+  isAdmin,
+  updateOrderStatusController
+)
+
+router.get(
+  '/orders/:id/history',
+  authenticate,
+  getOrderHistoryController
+)
+
 export default router

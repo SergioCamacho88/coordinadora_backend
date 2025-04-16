@@ -6,19 +6,20 @@ export const createOrder = async (order: {
   dimensions: string,
   productType: string,
   destinationAddress: string
-}) => {
+}): Promise<number> => {
   const query = `
     INSERT INTO orders 
       (user_id, weight, dimensions, product_type, destination_address, status) 
     VALUES (?, ?, ?, ?, ?, 'En espera')
   `
-  await db.query(query, [
+  const [result]: any = await db.query(query, [
     order.userId,
     order.weight,
     order.dimensions,
     order.productType,
     order.destinationAddress
   ])
+  return result.insertId
 }
 
 export const getOrders = async (status?: string): Promise<any[]> => {

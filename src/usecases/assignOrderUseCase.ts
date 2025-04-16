@@ -8,6 +8,7 @@ export const assignOrderUseCase = async (data: {
   rutaId: number
   transportistaId: number
 }) => {
+
   // 1. Validar orden en estado "En espera"
   const [orders]: any = await db.query(
     `SELECT * FROM orders WHERE id = ? AND status = 'En espera'`,
@@ -43,9 +44,16 @@ export const assignOrderUseCase = async (data: {
   // 5. Asignar orden
   await assignOrder(data.orderId, data.rutaId, data.transportistaId)
 
-  // 6. Obtener usuario y enviar correo
+  //6. guardar order_status_history
+  await db.query(
+    `INSERT INTO order_status_history (order_id, status) VALUES (?, ?)`,
+    [data.orderId, 'En tránsito']
+  )
+
+  // 7. Obtener usuario y enviar correo
   const user = await findUserById(order.user_id)
   if (user?.email) {
     await sendAssignmentEmail(user.email, order, rutas[0], transportista)
   }
+
 }

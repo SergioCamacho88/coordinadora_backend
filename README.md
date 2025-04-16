@@ -1,84 +1,83 @@
 # 📦 Coordinadora - Backend de Gestión de Envíos
 
-Este es el backend de una aplicación logística para gestionar el envío de paquetes, optimizar rutas de entrega y permitir a los clientes rastrear sus pedidos. Desarrollado como parte de una prueba técnica, siguiendo principios de **Clean Architecture**, **TypeScript** y buenas prácticas profesionales.
+Este es el backend de una aplicación logística para gestionar el envío de paquetes, optimizar rutas de entrega y permitir a los clientes rastrear sus pedidos en tiempo real. Desarrollado como parte de una prueba técnica, siguiendo principios de **Clean Architecture**, **TypeScript** y buenas prácticas profesionales.
 
-Repositorio: 👉 [https://github.com/SergioCamacho88/coordinadora_backend](https://github.com/SergioCamacho88/coordinadora_backend)
+## 🚀 Tecnologías utilizadas
 
----
+- **Node.js + TypeScript** - Backend robusto y tipado
+- **Express** - Framework web
+- **MySQL + Docker** - Base de datos principal
+- **Redis + Docker** - Caché y seguimiento en tiempo real
+- **Zod** - Validación de datos
+- **JWT** - Autenticación segura
+- **Resend** - Servicio de correos transaccionales
+- **OpenStreetMap API** - Validación de direcciones
+- **Clean Architecture** - Arquitectura escalable y mantenible
 
-## 🚀 Tecnologías usadas
+## 📋 Historias de Usuario Implementadas
 
-- **Node.js + TypeScript**
-- **Express**
-- **MySQL + Docker**
-- **Redis + Docker**
-- **Zod** (validación de datos)
-- **JWT** (autenticación)
-- **Resend** (envío de emails)
-- **OpenStreetMap API** (validación de direcciones)
-- **Clean Architecture**
+### HU1 - Registro y Autenticación de Usuarios
 
----
+- ✅ Registro de usuario (`POST /api/auth/register`)
+- ✅ Login con JWT (`POST /api/auth/login`)
+- ✅ Validación de datos con Zod
+- ✅ Encriptación de contraseñas con bcrypt
+- ✅ Middleware de autenticación para rutas protegidas
 
-## 📦 Funcionalidades por HU
+### HU2 - Creación de Órdenes de Envío
 
-### ✅ HU1 - Registro y autenticación
+- ✅ Endpoint protegido (`POST /api/orders`)
+- ✅ Validación completa de datos de entrada
+- ✅ Verificación de dirección con OpenStreetMap
+- ✅ Estado inicial "En espera" registrado en historial
+- ✅ Correo de confirmación con plantilla HTML profesional
 
-- Registro de usuario (`/api/auth/register`)
-- Login con JWT (`/api/auth/login`)
-- Validación de entrada con `zod`
-- Contraseña encriptada con `bcrypt`
-- Middleware `authenticate` para rutas protegidas
+### HU3 - Gestión de Rutas y Asignaciones
 
----
+- ✅ Asignación de rutas (`POST /api/orders/:id/assign`) - Solo admin
+- ✅ Validaciones:
+  - Existencia y estado de la orden
+  - Capacidad del transportista
+  - Disponibilidad de ruta
+- ✅ Actualización a estado "En tránsito"
+- ✅ Notificación por correo
+- ✅ Endpoints para dashboard:
+  - `GET /api/orders` - Filtrado por estado
+  - `GET /api/routes` - Listado de rutas
+  - `GET /api/carriers` - Transportistas disponibles
 
-### ✅ HU2 - Creación de órdenes de envío
+### HU4 - Sistema de Seguimiento
 
-- Ruta protegida `POST /api/orders`
-- Validación con `zod`
-- Validación de dirección real usando OpenStreetMap
-- Estado inicial: `En espera`
-- Correo de confirmación al usuario vía Resend
-- Plantilla HTML profesional reutilizable para el email
+- ✅ Seguimiento en tiempo real con Redis
+- ✅ Historial completo en MySQL
+- ✅ Cambio a estado "Entregado":
+  - Libera automáticamente al transportista
+  - Envía confirmación por correo
+- ✅ Timeline del envío (`GET /api/orders/:id/timeline`)
+- ✅ Notificaciones en tiempo real de cambios de estado
 
----
+## ⚙️ Configuración del Proyecto
 
-### ✅ HU3 - Asignación de rutas a los envíos
+### Prerrequisitos
 
-- Ruta protegida solo para admin: `POST /api/orders/:id/assign`
-- Validación de:
-  - existencia de la orden y estado "En espera"
-  - disponibilidad y capacidad del transportista
-  - existencia de la ruta
-- Actualiza el estado de la orden a `"En tránsito"`
-- Envía un correo de asignación con resumen
-- Endpoints adicionales para el dashboard:
-  - `GET /api/orders?status=En espera` → listar órdenes por estado
-  - `GET /api/rutas` → listar rutas
-  - `GET /api/transportistas?disponible=true` → listar transportistas disponibles
-- Middleware `isAdmin` protege todos los endpoints del dashboard
+- Node.js >= 18
+- Docker y Docker Compose
+- npm o yarn
 
----
+### Instalación
 
-## ⚙️ Configuración local
-
-### 1. Clona el repositorio
-
+1. Clonar el repositorio:
 ```bash
 git clone https://github.com/SergioCamacho88/coordinadora_backend.git
 cd coordinadora_backend
 ```
 
-### 2. Instala dependencias
-
+2. Instalar dependencias:
 ```bash
 npm install
 ```
 
-### 3. Variables de entorno
-
-Crea un archivo `.env`:
-
+3. Configurar variables de entorno (`.env`):
 ```env
 PORT=3000
 
@@ -93,87 +92,188 @@ REDIS_HOST=localhost
 REDIS_PORT=6379
 
 # JWT
-JWT_SECRET=supersecreto
+JWT_SECRET=tu_secreto_seguro
 
 # Resend
-RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxx
+RESEND_API_KEY=re_xxxxxxxxxxxxxx
 ```
 
----
+### 🐳 Contenedores Docker
 
-## 🐳 Docker para MySQL + Redis
-
-### `docker-compose.yml` incluido con:
-
-- MySQL (puerto 3306)
-- Redis (puerto 6379)
-- phpMyAdmin (puerto 8080)
-
-### Comando:
-
+Levanta los servicios necesarios:
 ```bash
 docker-compose up -d
 ```
 
----
+Incluye:
+- MySQL (puerto 3306)
+- Redis (puerto 6379)
+- phpMyAdmin (puerto 8080)
 
-## ▶️ Correr el backend
+### Iniciar el servidor
 
 ```bash
 npm run dev
 ```
 
----
+## 📁 Estructura del Proyecto
 
-## 🧪 Pruebas útiles
+```
+src/
+├── config/              # Configuraciones (DB, Redis, etc.)
+├── controllers/         # Controladores HTTP
+├── routes/             # Definición de rutas
+├── middlewares/        # Middlewares (auth, validation)
+├── usecases/          # Lógica de negocio
+├── repositories/       # Acceso a datos
+├── services/          # Servicios externos (email, etc.)
+├── templates/         # Plantillas de correo
+├── schemas/           # Esquemas de validación
+├── entities/          # Modelos de dominio
+└── index.ts           # Punto de entrada
 
-### Crear orden (usuario)
+```
+
+## 📡 API Endpoints
+
+### 🔐 Autenticación
+
+#### Registro de Usuario
+```http
+POST /api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Sergio Admin",
+  "email": "usuario@ejemplo.com",
+  "password": "123456"
+}
+```
+
+#### Login
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "usuario@ejemplo.com",
+  "password": "123456"
+}
+```
+
+### 📦 Gestión de Órdenes
+
+#### Crear Nueva Orden
 ```http
 POST /api/orders
 Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "weight": 5.5,
+  "dimensions": "40x30x20",
+  "productType": "Electrónica",
+  "destinationAddress": "Carrera 15 # 80 - 20, bogota"
+}
 ```
 
-### Asignar orden (admin)
+#### Listar Órdenes
 ```http
-POST /api/orders/:id/assign
-Authorization: Bearer <admin_token>
+GET /api/orders
+Authorization: Bearer <token>
 ```
 
-### Filtrar órdenes
+#### Filtrar Órdenes por Estado
 ```http
 GET /api/orders?status=En espera
+Authorization: Bearer <token>
+```
+
+#### Consultar Estado de una Orden
+```http
+GET /api/orders/{orderId}/status
+Authorization: Bearer <token>
+```
+
+#### Asignar Orden (Solo Admin)
+```http
+POST /api/orders/{orderId}/assign
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
+{
+  "rutaId": 1,
+  "transportistaId": 2
+}
+```
+
+#### Actualizar Estado de Orden (Solo Admin)
+```http
+PUT /api/orders/{orderId}/status
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
+{
+  "status": "Entregado"
+}
+```
+
+### 🚛 Gestión de Rutas y Transportistas
+
+#### Listar Rutas
+```http
+GET /api/rutas
 Authorization: Bearer <admin_token>
 ```
 
-### Listar rutas y transportistas
+#### Listar Todos los Transportistas
 ```http
-GET /api/rutas
+GET /api/transportistas
+Authorization: Bearer <admin_token>
+```
+
+#### Listar Transportistas Disponibles
+```http
 GET /api/transportistas?disponible=true
 Authorization: Bearer <admin_token>
 ```
 
----
+### 🔍 Debugging (Solo Admin)
 
-## 🧠 Arquitectura de carpetas
-
-```bash
-src/
-├── config/              # Conexiones a MySQL, Redis
-├── controllers/         # HTTP handlers
-├── routes/              # Rutas Express
-├── middlewares/         # Autenticación, validación de roles
-├── usecases/            # Lógica de negocio
-├── repositories/        # Consultas a BD
-├── services/            # Emails, JWT, hashing
-├── templates/           # HTML para correos
-├── schemas/             # Validaciones Zod
-├── entities/            # Modelos de dominio
-└── index.ts             # Punto de entrada
+#### Consultar Estado en Redis
+```http
+GET /api/debug/redis/order:{orderId}:status
+Authorization: Bearer <admin_token>
 ```
 
----
+#### Consultar Redis General
+```http
+GET /api/debug/redis
+Authorization: Bearer <admin_token>
+```
 
-## ✉️ Contacto
+## 🔑 Estados de Orden
+
+Los estados posibles para una orden son:
+- `En espera` - Estado inicial al crear la orden
+- `En tránsito` - Cuando se asigna a un transportista
+- `Entregado` - Estado final, libera al transportista
+
+## 🔒 Roles y Permisos
+
+- **Usuario Regular**:
+  - Crear órdenes
+  - Consultar sus propias órdenes
+  - Ver estado de sus envíos
+
+- **Administrador**:
+  - Todas las acciones de usuario regular
+  - Asignar órdenes a transportistas
+  - Gestionar rutas y transportistas
+  - Cambiar estados de órdenes
+  - Acceder a endpoints de debugging
+
+## 👤 Autor
 
 Este proyecto fue desarrollado por **Sergio Camacho** como parte de una prueba técnica para Coordinadora.
 

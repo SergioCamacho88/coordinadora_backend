@@ -7,7 +7,7 @@ import protectedRoutes from './routes/protected.routes'
 import orderRoutes from './routes/order.routes'
 import rutaRoutes from './routes/ruta.routes'
 import transportistaRoutes from './routes/transportista.routes'
-
+import debugRoutes from './routes/debug.routes'
 
 dotenv.config()
 
@@ -21,6 +21,7 @@ app.use('/api', orderRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api', rutaRoutes)
 app.use('/api', transportistaRoutes)
+app.use('/api', debugRoutes)
 
 const PORT = process.env.PORT || 3000
 
