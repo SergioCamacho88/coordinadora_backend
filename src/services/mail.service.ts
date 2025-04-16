@@ -6,6 +6,11 @@ import { buildOrderStatusUpdatedEmail } from '../templates/orderStatusUpdatedEma
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export const sendConfirmationEmail = async (to: string, orderInfo: any) => {
+  if (process.env.SEND_EMAILS !== 'true') {
+    console.log(`📭 Simulación de envío: correo a ${to} omitido`)
+    return
+  }
+  
   try {
     const html = buildOrderConfirmationEmail(orderInfo)
 
@@ -32,6 +37,11 @@ export const sendAssignmentEmail = async (
   ruta: any,
   transportista: any
 ) => {
+  if (process.env.SEND_EMAILS !== 'true') {
+    console.log(`📭 Simulación de envío: correo a ${to} omitido`)
+    return
+  }
+  
   try {
     const html = buildOrderAssignedEmail(order, ruta, transportista)
 
@@ -52,6 +62,11 @@ export const sendAssignmentEmail = async (
   }
 }
 export const sendStatusUpdateEmail = async (to: string, orderId: number, status: string) => {
+  if (process.env.SEND_EMAILS !== 'true') {
+    console.log(`📭 Simulación de envío: correo a ${to} omitido`)
+    return
+  }
+
   try {
     const html = buildOrderStatusUpdatedEmail(orderId, status)
 

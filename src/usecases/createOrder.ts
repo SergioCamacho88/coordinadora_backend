@@ -3,6 +3,7 @@ import { validateAddress } from '../services/address.service'
 import { findUserById } from '../repositories/user.repository'
 import { sendConfirmationEmail } from '../services/mail.service'
 import { db } from '../config/mysql'
+import { notifyClients } from '../index'
 
 export const createOrderUseCase = async (data: {
   userId: number
@@ -25,7 +26,14 @@ export const createOrderUseCase = async (data: {
     `INSERT INTO order_status_history (order_id, status) VALUES (?, ?)`,
     [orderId, 'En espera']
   )
-
+  await notifyClients({
+    type: 'status_update',
+    orderId,
+    newStatus: 'En espera',
+    updatedAt: new Date().toISOString()
+  })
+  
+  
   // 3. Obtener email del usuario
   const user = await findUserById(data.userId)
   if (user?.email) {

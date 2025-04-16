@@ -2,6 +2,7 @@ import { db } from '../config/mysql'
 import { assignOrder } from '../repositories/orderAssignment.repository'
 import { findUserById } from '../repositories/user.repository'
 import { sendAssignmentEmail } from '../services/mail.service'
+import { notifyClients } from '../index'
 
 export const assignOrderUseCase = async (data: {
   orderId: number
@@ -49,6 +50,14 @@ export const assignOrderUseCase = async (data: {
     `INSERT INTO order_status_history (order_id, status) VALUES (?, ?)`,
     [data.orderId, 'En tránsito']
   )
+
+  await notifyClients({
+    type: 'status_update',
+    orderId: data.orderId,
+    newStatus: 'En tránsito',
+    updatedAt: new Date().toISOString()
+  })
+  
 
   // 7. Obtener usuario y enviar correo
   const user = await findUserById(order.user_id)

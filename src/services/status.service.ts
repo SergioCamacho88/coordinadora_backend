@@ -2,6 +2,7 @@ import { redisClient } from '../config/redis'
 import { db } from '../config/mysql'
 import { findUserById } from '../repositories/user.repository'
 import { sendStatusUpdateEmail } from './mail.service'
+import { notifyClients } from '../index'
 
 
 const TTL_SECONDS = 300 // 5 minutos
@@ -60,6 +61,12 @@ export const updateOrderStatus = async (orderId: number, newStatus: string): Pro
     `INSERT INTO order_status_history (order_id, status) VALUES (?, ?)`,
     [orderId, newStatus]
   )
+  await notifyClients({
+    type: 'status_update',
+    orderId,
+    newStatus,
+    updatedAt: new Date().toISOString()
+  })
     // Actualizar Redis
     await redisClient.setEx(`order:${orderId}:status`, 300, newStatus)
 
