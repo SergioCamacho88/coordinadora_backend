@@ -1,108 +1,155 @@
-# 📦 Coordinadora - Backend de Gestión de Envíos
+# 🚚 Coordinadora Backend
 
-Este es el backend de una aplicación logística para gestionar el envío de paquetes, optimizar rutas de entrega y permitir a los clientes rastrear sus pedidos en tiempo real. Desarrollado como parte de una prueba técnica, siguiendo principios de **Clean Architecture**, **TypeScript** y buenas prácticas profesionales.
+Sistema backend para gestión de envíos, asignación de rutas logísticas, y seguimiento de órdenes en tiempo real.
 
-## 🚀 Tecnologías utilizadas
+Desarrollado como parte de la **Prueba Técnica Fullstack - Coordinadora (Abril 2025)**.
+
+---
+
+## 👨‍💻 Autor
+
+- **Nombre:** Sergio Camacho
+- **Telfono:** 3203598325
+- **Fecha:** Abril 2025
+
+---
+
+## 📚 Tecnologías principales
 
 - **Node.js + TypeScript**
-- **Express**
-- **MySQL + Docker**
-- **Redis + Docker**
-- **Zod** - Validación de datos
-- **JWT** - Autenticación segura
-- **Resend** - Correos transaccionales
-- **OpenStreetMap API** - Validación de direcciones
-- **WebSocket (`ws`)** - Seguimiento en tiempo real
-
-## 📋 Historias de Usuario Implementadas
-
-### HU1 - Registro y Autenticación de Usuarios
-- ✅ Registro y Login de usuarios
-- ✅ Validación con Zod y bcrypt
-- ✅ Middleware de autenticación con JWT
-
-### HU2 - Creación de Órdenes de Envío
-- ✅ Creación de orden protegida
-- ✅ Validación con OpenStreetMap
-- ✅ Estado inicial "En espera" registrado en historial
-- ✅ Notificación por correo electrónico
-
-### HU3 - Gestión de Rutas y Asignaciones
-- ✅ Asignación de rutas a órdenes
-- ✅ Validación de transportistas y rutas
-- ✅ Actualización de estado a "En tránsito"
-- ✅ Envío de correo de asignación
-
-### HU4 - Sistema de Seguimiento
-- ✅ Seguimiento en tiempo real con WebSocket y Redis
-- ✅ Historial completo de estados en MySQL
-- ✅ Cambio a estado "Entregado" libera al transportista
-- ✅ Emisión de notificaciones de estado por WebSocket
+- **Express** - Framework para APIs HTTP
+- **MySQL + Docker** - Base de datos relacional y contenedorización para local
+- **Redis + Docker** - Cache y suscripciones en tiempo real (y Redis Mock en test)
+- **Zod** - Validación segura de datos de entrada
+- **JWT** - Autenticación segura basada en tokens
+- **Resend** - Servicio para envío de correos transaccionales
+- **OpenStreetMap API** - Validación de direcciones de envío
+- **WebSocket (`ws`)** - Seguimiento en tiempo real del estado de las órdenes
+- **Jest + Supertest** - Testing unitario y de integración
+- **ioredis-mock** - Simulación de Redis en ambiente de pruebas
+- **Docker Compose** - Orquestación de contenedores locales
 
 
-### HU5 - Reportes y Métricas de Envíos
+---
 
-- ✅ Endpoint para consultar reportes de envíos con filtros avanzados (`GET /api/reportes/envios`)
-  - Filtros: rango de fechas, estado, transportista asignado, paginación
-- ✅ Endpoint para obtener métricas agregadas (`GET /api/reportes/envios/metricas`)
-  - Promedio de tiempo de entrega
-  - Cantidad de envíos completados
-- ✅ Implementación de Redis para almacenar en caché consultas frecuentes
-- ✅ Optimización mediante índices en MySQL en columnas `status`, `changed_at`, `transportista_id`
-- ✅ Cache manualmente limpiable (`DELETE /api/reportes/envios/cache`)
-- ✅ Uso de JOINs y subconsultas en las consultas SQL para desempeño avanzado
+## 🚀 Scripts disponibles
 
+| Script | Acción |
+|:-------|:-------|
+| `npm run dev` | Ejecuta el servidor en desarrollo (`ts-node-dev`) |
+| `npm run build` | Compila TypeScript a `/dist` |
+| `npm run start` | Ejecuta servidor desde `/dist` |
+| `npm run test` | Ejecuta pruebas automáticas usando Redis Mock |
 
-## ⚙️ Configuración del Proyecto
+---
 
-1. Clonar el repositorio:
+## 📖 Historias de Usuario Implementadas
+
+- ✅ HU1: Registro y autenticación de usuarios
+- ✅ HU2: Creación de órdenes de envío
+- ✅ HU3: Asignación de rutas a los envíos
+- ✅ HU4: Seguimiento del estado del envío en tiempo real
+- ✅ HU5: Consulta avanzada de envíos y desempeño logístico
+
+---
+
+## 🧪 Pruebas automáticas
+
+Este proyecto implementa pruebas automáticas que cubren:
+
+- Registro y login de usuarios
+- Creación y actualización de órdenes
+- Asignación de rutas
+- Consulta de reportes y métricas
+
+**Notas:**
+- En ambiente de testing (`NODE_ENV=test`) se usa `ioredis-mock` para Redis.
+- No es necesario levantar servicios externos reales para correr los tests.
+
 ```bash
-git clone https://github.com/SergioCamacho88/coordinadora_backend.git
-cd coordinadora_backend
+npm run test
 ```
 
-2. Instalar dependencias:
-```bash
-npm install
-```
+---
 
-3. Configurar el archivo `.env`:
+## ⚙️ Variables de entorno necesarias (.env)
+
 ```env
+# Configuración general
 PORT=3000
+
+# Base de datos MySQL
 DB_HOST=localhost
+DB_PORT=3306
 DB_USER=root
-DB_PASSWORD=root
+DB_PASSWORD=tu_contraseña
 DB_NAME=logistics
+
+# Redis
 REDIS_HOST=localhost
 REDIS_PORT=6379
-JWT_SECRET=tu_secreto_seguro
-RESEND_API_KEY=re_xxxxxxx
-SEND_EMAILS=true
+
+# JWT
+JWT_SECRET=supersecreto123
+
+# Servicio de envío de correos (Resend)
+RESEND_API_KEY=tu_resend_api_key
+RESEND_EMAIL_FROM=no-responder@tudominio.com
+
+# WebSocket
+WS_URL=http://localhost:3000
+
 ```
 
-4. Levantar los contenedores:
-```bash
-docker-compose up -d
+
+---
+
+## 📦 Estructura del Proyecto
+
+```
+src/
+  ├── config/               # Configuración de MySQL, Redis, WebSocket
+  ├── controllers/          # Controladores de rutas
+  ├── database/             # Scripts SQL para estructura de base de datos
+  ├── entities/             # Entidades del dominio
+  ├── middlewares/          # Middlewares de autenticación y validaciones
+  ├── repositories/         # Acceso a datos (MySQL y Redis)
+  ├── routes/               # Definición de endpoints
+  ├── schemas/              # Validaciones con Zod
+  ├── services/             # Servicios como envío de mails y validaciones de datos
+  ├── templates/            # Templates de correos electrónicos
+  ├── types/                # Tipado extendido de Express
+  ├── usecases/             # Casos de uso de negocio (Clean Architecture)
+  ├── utils/                # Utilidades auxiliares (JWT, hashing)
+  ├── websocket-client/     # Cliente WebSocket de prueba
+
 ```
 
-5. Iniciar el servidor de desarrollo:
-```bash
-npm run dev
-```
+---
+## 📡 Principales Endpoints de la API
 
-## 📡 API Endpoints
+## 📡 Principales Endpoints de la API
 
-Incluye:
-- `/api/auth/register`
-- `/api/auth/login`
-- `/api/orders`
-- `/api/orders/:id/status`
-- `/api/orders/:id/assign`
-- `/api/orders/:id/history`
-- `/api/reportes/envios`
-- `/api/reportes/envios/metricas`
-- `/api/reportes/envios/cache` (DELETE)
+| Método | Endpoint | Descripción | Requiere Token |
+|:-------|:---------|:------------|:--------------|
+| `POST` | `/api/auth/register` | Registro de nuevos usuarios | ❌ No |
+| `POST` | `/api/auth/login` | Autenticación de usuarios, devuelve token JWT | ❌ No |
+| `POST` | `/api/orders` | Creación de nuevas órdenes de envío | ✅ Sí |
+| `PUT` | `/api/orders/:id/status` | Actualización del estado de una orden | ✅ Sí |
+| `POST` | `/api/orders/assign` | Asignar orden a transportista disponible (solo admins) | ✅ Sí |
+| `GET` | `/api/reportes/envios` | Consulta avanzada de envíos con filtros (solo admins) | ✅ Sí |
+| `GET` | `/api/reportes/envios/metricas` | Consulta de métricas logísticas (solo admins) | ✅ Sí |
+| `WebSocket` | `/ws` | Seguimiento en tiempo real del estado de órdenes (token obligatorio en conexión) | ✅ Sí |
 
-## 👤 Autor
+---
 
-Proyecto desarrollado por **Sergio Camacho** para Coordinadora.
+## 📡 Funcionalidades Clave
+
+- **Registro y Login** seguro usando JWT.
+- **Creación y asignación de órdenes** a transportistas.
+- **Seguimiento en tiempo real** de cambios de estado vía WebSocket.
+- **Notificaciones por correo electrónico** en cada cambio importante.
+- **Cacheo de reportes** usando Redis para mejor desempeño.
+- **Pruebas unitarias e integración** de todos los flujos principales.
+
+---
