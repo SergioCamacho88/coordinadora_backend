@@ -7,6 +7,8 @@ import transportistaRoutes from "./routes/transportista.routes";
 import debugRoutes from "./routes/debug.routes";
 import reportRoutes from "./routes/report.routes";
 import protectedRoutes from "./routes/protected.routes";
+import transportistasRoutes from "./modules/transportistas/transportistas.routes";
+
 import cors from "cors";
 
 dotenv.config();
@@ -22,5 +24,6 @@ app.use("/api", transportistaRoutes);
 app.use("/api", debugRoutes);
 app.use("/api", reportRoutes);
 app.use("/api", protectedRoutes);
+app.use("/api/transportistas", transportistasRoutes);
 
 export default app;
