@@ -1,25 +1,26 @@
-import express from 'express'
-import dotenv from 'dotenv'
-import authRoutes from './routes/auth.routes'
-import orderRoutes from './routes/order.routes'
-import rutaRoutes from './routes/ruta.routes'
-import transportistaRoutes from './routes/transportista.routes'
-import debugRoutes from './routes/debug.routes'
-import reportRoutes from './routes/report.routes'
-import protectedRoutes from './routes/protected.routes'
+import express from "express";
+import dotenv from "dotenv";
+import authRoutes from "./routes/auth.routes";
+import orderRoutes from "./routes/order.routes";
+import rutaRoutes from "./routes/ruta.routes";
+import transportistaRoutes from "./routes/transportista.routes";
+import debugRoutes from "./routes/debug.routes";
+import reportRoutes from "./routes/report.routes";
+import protectedRoutes from "./routes/protected.routes";
+import cors from "cors";
 
-dotenv.config()
+dotenv.config();
 
-const app = express()
-app.use(express.json())
-
+const app = express();
+app.use(express.json());
+app.use(cors());
 // Rutas
-app.use('/api/auth', authRoutes)
-app.use('/api', orderRoutes)
-app.use('/api', rutaRoutes)
-app.use('/api', transportistaRoutes)
-app.use('/api', debugRoutes)
-app.use('/api', reportRoutes)
-app.use('/api', protectedRoutes)
+app.use("/api/auth", authRoutes);
+app.use("/api", orderRoutes);
+app.use("/api", rutaRoutes);
+app.use("/api", transportistaRoutes);
+app.use("/api", debugRoutes);
+app.use("/api", reportRoutes);
+app.use("/api", protectedRoutes);
 
-export default app
+export default app;
