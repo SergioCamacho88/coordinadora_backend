@@ -8,6 +8,7 @@ import rutaRoutes from './routes/ruta.routes'
 import transportistaRoutes from './routes/transportista.routes'
 import debugRoutes from './routes/debug.routes'
 import protectedRoutes from './routes/protected.routes'
+import reportRoutes from './routes/report.routes'
 
 import http from 'http'
 import { WebSocketServer } from 'ws'
@@ -17,13 +18,14 @@ dotenv.config()
 const app = express()
 app.use(express.json())
 
-// ✅ Rutas organizadas
+
 app.use('/api/auth', authRoutes)
 app.use('/api', orderRoutes)
 app.use('/api', rutaRoutes)
 app.use('/api', transportistaRoutes)
 app.use('/api', debugRoutes)
 app.use('/api', protectedRoutes)
+app.use('/api', reportRoutes)
 
 // Crear servidor HTTP + WebSocket
 const server = http.createServer(app)
