@@ -33,6 +33,7 @@ export const createOrderController = async (
     };
 
     const orderId = await createOrderUseCase(orderData);
+
     res.status(201).json({ orderId, message: "Orden creada correctamente" });
   } catch (error: any) {
     if (error.name === "JsonWebTokenError") {

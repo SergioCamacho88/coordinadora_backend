@@ -49,6 +49,18 @@ export const createOrderUseCase = async (data: {
       updatedAt: new Date().toISOString(),
     });
 
+    await notifyClients({
+      type: "new_order",
+      order: {
+        id: orderId,
+        weight: data.weight,
+        dimensions: data.dimensions,
+        productType: data.productType || data.description || "",
+        destination_address: destinationToValidate,
+        status: "En espera",
+      },
+    });
+
     // 3. Enviar email de confirmación
     const user = await findUserById(data.user_id);
     if (user?.email) {

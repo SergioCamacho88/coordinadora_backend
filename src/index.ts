@@ -12,6 +12,7 @@ wss.on("connection", (ws) => {
 });
 
 export const notifyClients = (message: any) => {
+  console.log("📡 Notificando a los clientes:", message);
   wss.clients.forEach((client) => {
     if (client.readyState === 1) {
       client.send(JSON.stringify(message));
