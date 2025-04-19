@@ -7,8 +7,9 @@
       "outDir": "dist",
       "baseUrl": "src",
       "resolveJsonModule": true,
-      "typeRoots": ["./node_modules/@types", "./src/types"]
-
+      "typeRoots": ["./node_modules/@types", "./src/types"],
+      "allowImportingTsExtensions": true,
+      "noEmit": true
     },
     "include": ["src"]
   }
