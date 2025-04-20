@@ -8,6 +8,8 @@ import debugRoutes from "./routes/debug.routes";
 import reportRoutes from "./routes/report.routes";
 import protectedRoutes from "./routes/protected.routes";
 import transportistasRoutes from "./modules/transportistas/transportistas.routes";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./docs/swaggerConfig";
 
 import cors from "cors";
 
@@ -25,5 +27,6 @@ app.use("/api", debugRoutes);
 app.use("/api", reportRoutes);
 app.use("/api", protectedRoutes);
 app.use("/api/transportistas", transportistasRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 export default app;
