@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express'
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecreto'
 
-export const authenticate = (req: Request, res: Response, next: NextFunction): void => {
+export const authenticate = (req: Request & { user?: JwtPayload & { id?: number; email?: string; role?: string } }, res: Response, next: NextFunction): void => {
   const authHeader = req.headers.authorization
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -15,8 +15,13 @@ export const authenticate = (req: Request, res: Response, next: NextFunction): v
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET)
-    req.user = decoded
-    next()
+
+    if (typeof decoded === 'object' && decoded !== null) {
+      req.user = decoded as JwtPayload & { id?: number; email?: string; role?: string }
+      next()
+    } else {
+      res.status(401).json({ error: 'Token inválido' })
+    }
   } catch (err) {
     res.status(401).json({ error: 'Token inválido' })
     return
