@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>WebSocket - Estado de órdenes</title>
+</head>
+<body>
+  <h1>📡 WebSocket conectado</h1>
+  <pre id="output">Esperando mensajes...</pre>
+
+  <script>
+    const output = document.getElementById('output')
+
+    const socket = new WebSocket('ws://localhost:3000')
+
+    socket.addEventListener('open', () => {
+      console.log('✅ Conexión WebSocket abierta')
+      output.textContent = '✅ Conexión WebSocket abierta'
+    })
+
+    socket.addEventListener('message', (event) => {
+      console.log('📨 Mensaje recibido:', event.data)
+      output.textContent += `\n\n📨 ${event.data}`
+    })
+
+    socket.addEventListener('close', () => {
+      console.log('🔌 Conexión cerrada')
+      output.textContent += '\n🔌 Conexión cerrada'
+    })
+
+    socket.addEventListener('error', (err) => {
+      console.error('❌ Error en WebSocket:', err)
+      output.textContent += '\n❌ Error en WebSocket'
+    })
+  </script>
+</body>
+</html>
