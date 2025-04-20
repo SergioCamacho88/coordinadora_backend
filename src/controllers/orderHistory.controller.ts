@@ -1,5 +1,3 @@
-// src/controllers/orderHistory.controller.ts
-
 import { Request, Response } from "express";
 import { getUserOrderHistoryUseCase } from "../usecases/orderHistory.usecase";
 
@@ -8,8 +6,7 @@ export const getUserOrderHistoryController = async (
   res: Response
 ): Promise<void> => {
   try {
-    const userId = req.user?.id; // Asumiendo que tienes middleware que mete el usuario en req.user
-
+    const userId = req.user?.id;
     if (!userId) {
       res.status(401).json({ message: "Usuario no autenticado." });
       return;

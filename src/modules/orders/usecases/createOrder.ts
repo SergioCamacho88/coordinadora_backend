@@ -19,13 +19,15 @@ export const createOrderUseCase = async (data: {
   if (!destinationToValidate) {
     throw new Error("La dirección de destino es requerida");
   }
-
+  console.log("data");
+  console.log(data);
   const isValid = await validateAddress(destinationToValidate);
   if (!isValid) {
     throw new Error("La dirección de destino no es válida.");
   }
 
   try {
+    console.log("// 1. Crear la orden");
     // 1. Crear la orden
     const orderData = {
       userId: data.user_id,
@@ -64,13 +66,14 @@ export const createOrderUseCase = async (data: {
     // 3. Enviar email de confirmación
     const user = await findUserById(data.user_id);
     if (user?.email) {
-      await sendConfirmationEmail(user.email, {
+
+      await sendConfirmationEmail(user.email, {        
         orderId,
         origin: data.origin || "",
-        destination: destinationToValidate,
+        destination_address: destinationToValidate,
         weight: data.weight,
         dimensions: data.dimensions,
-        description: data.productType || data.description || "",
+        product_type: data.productType,
       });
     }
 

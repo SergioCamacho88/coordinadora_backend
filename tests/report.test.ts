@@ -5,6 +5,7 @@ import { db } from "../src/config/mysql";
 describe("Report Endpoints", () => {
   const api = request(app);
   let adminToken: string;
+  let orderId: number;
 
   const testAdmin = {
     email: `adminuser${Math.random().toString(36).substring(2, 15)}@mail.com`,
@@ -32,6 +33,14 @@ describe("Report Endpoints", () => {
     });
 
     adminToken = res.body.token;
+  }, 10000); // Aumentamos el timeout para el beforeAll
+
+  afterAll(async () => {
+    // Limpiar datos después de las pruebas
+    if (orderId) {
+      await db.query(`DELETE FROM orders WHERE id = ?`, [orderId]);
+    }
+    await db.query(`DELETE FROM users WHERE email = ?`, [testAdmin.email]);
   });
 
   it("debe consultar reportes de envíos exitosamente", async () => {
@@ -46,8 +55,11 @@ describe("Report Endpoints", () => {
         destinationAddress: "Calle 100, Bogotá",
       });
 
-    const orderId = orderRes.body.orderId;
+    orderId = orderRes.body.orderId;
     console.log("Orden creada, ID:", orderId);
+
+    // Esperar un momento para asegurar que la orden se haya creado
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Cambio a "En tránsito"
     const updateRes1 = await api
@@ -55,11 +67,15 @@ describe("Report Endpoints", () => {
       .set("Authorization", `Bearer ${adminToken}`)
       .send({ status: "En tránsito" });
 
+    expect(updateRes1.statusCode).toBe(200);
     console.log(
       "Cambio a En tránsito:",
       updateRes1.statusCode,
       updateRes1.body
     );
+
+    // Esperar un momento para asegurar que el estado se haya actualizado
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Cambio a "Entregado"
     const updateRes2 = await api
@@ -67,7 +83,11 @@ describe("Report Endpoints", () => {
       .set("Authorization", `Bearer ${adminToken}`)
       .send({ status: "Entregado" });
 
+    expect(updateRes2.statusCode).toBe(200);
     console.log("Cambio a Entregado:", updateRes2.statusCode, updateRes2.body);
+
+    // Esperar un momento para asegurar que el estado se haya actualizado
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Consultar reporte
     const res = await api
@@ -82,7 +102,7 @@ describe("Report Endpoints", () => {
 
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
-  });
+  }, 15000); // Aumentamos el timeout para este test específico
 
   it("debe consultar métricas de envíos exitosamente", async () => {
     const res = await api

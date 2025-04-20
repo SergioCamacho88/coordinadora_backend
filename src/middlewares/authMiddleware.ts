@@ -1,29 +1,34 @@
-import { Request, Response, NextFunction } from 'express'
-import jwt, { JwtPayload } from 'jsonwebtoken'
+import { Request, Response, NextFunction } from "express";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecreto'
+const JWT_SECRET = process.env.JWT_SECRET || "supersecreto";
 
-export const authenticate = (req: Request & { user?: JwtPayload & { id?: number; email?: string; role?: string } }, res: Response, next: NextFunction): void => {
-  const authHeader = req.headers.authorization
+interface UserPayload extends JwtPayload {
+  id?: number;
+  email?: string;
+  role?: string;
+}
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    res.status(401).json({ error: 'Token no proporcionado' })
-    return
+export const authenticate = (
+  req: Request & { user?: UserPayload },
+  res: Response,
+  next: NextFunction
+): void => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    res.status(401).json({ error: "Token no proporcionado" });
+    return;
   }
 
-  const token = authHeader.split(' ')[1]
+  const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET)
-
-    if (typeof decoded === 'object' && decoded !== null) {
-      req.user = decoded as JwtPayload & { id?: number; email?: string; role?: string }
-      next()
-    } else {
-      res.status(401).json({ error: 'Token inválido' })
-    }
+    const decoded = jwt.verify(token, JWT_SECRET) as UserPayload;
+    req.user = decoded;
+    next();
   } catch (err) {
-    res.status(401).json({ error: 'Token inválido' })
-    return
+    res.status(401).json({ error: "Token inválido" });
+    return;
   }
-}
+};

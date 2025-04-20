@@ -9,7 +9,7 @@ import reportRoutes from "./routes/report.routes";
 import protectedRoutes from "./routes/protected.routes";
 import transportistasRoutes from "./modules/transportistas/transportistas.routes";
 import swaggerUi from "swagger-ui-express";
-import { swaggerSpec } from "./docs/swaggerConfig";
+import swaggerSpec from "./docs/swaggerConfig";
 
 import cors from "cors";
 

@@ -10,7 +10,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: "http://localhost:3000", // Cambia según tu entorno
+      url: "http://localhost:3000",
       description: "Servidor de desarrollo",
     },
   ],
@@ -55,12 +55,9 @@ const swaggerDefinition = {
 
 const options = {
   swaggerDefinition,
-  // Especificar la ruta donde Swagger buscará tus endpoints documentados
-  apis: [
-    "./src/routes/**/*.ts",
-    "./src/controllers/**/*.ts",
-    "./src/modules/orders/orders.routes.ts",
-  ],
+  apis: ["./src/routes/*.ts"],
 };
 
-export const swaggerSpec = swaggerJSDoc(options);
+const swaggerSpec = swaggerJSDoc(options);
+
+export default swaggerSpec;

@@ -1,10 +1,10 @@
 export const buildOrderConfirmationEmail = (orderInfo: {
-    weight: number
-    dimensions: string
-    productType: string
-    destinationAddress: string
-  }) => {
-    return `
+  weight: number;
+  dimensions: string;
+  product_type: string;
+  destination_address: string;
+}) => {
+  return `
       <div style="font-family: 'Arial', sans-serif; max-width: 600px; margin: auto; padding: 24px; background-color: #f9f9f9; border-radius: 8px;">
         <h2 style="color: #2b4eff;">📦 Tu orden fue registrada exitosamente</h2>
         <p style="font-size: 16px; margin-top: 20px;">Gracias por confiar en Coordinadora. Aquí tienes el resumen de tu envío:</p>
@@ -20,11 +20,11 @@ export const buildOrderConfirmationEmail = (orderInfo: {
           </tr>
           <tr>
             <td style="font-weight: bold; padding: 8px;">Tipo de producto:</td>
-            <td style="padding: 8px;">${orderInfo.productType}</td>
+            <td style="padding: 8px;">${orderInfo.product_type}</td>
           </tr>
           <tr style="background-color: #f0f0f0;">
             <td style="font-weight: bold; padding: 8px;">Destino:</td>
-            <td style="padding: 8px;">${orderInfo.destinationAddress}</td>
+            <td style="padding: 8px;">${orderInfo.destination_address}</td>
           </tr>
           <tr>
             <td style="font-weight: bold; padding: 8px;">Estado inicial:</td>
@@ -37,6 +37,5 @@ export const buildOrderConfirmationEmail = (orderInfo: {
           Ir a Coordinadora
         </a>
       </div>
-    `
-  }
-  
+    `;
+};

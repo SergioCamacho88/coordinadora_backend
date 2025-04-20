@@ -29,17 +29,16 @@ Desarrollado como parte de la **Prueba Técnica Fullstack - Coordinadora (Abril 
 - **ioredis-mock** - Simulación de Redis en ambiente de pruebas
 - **Docker Compose** - Orquestación de contenedores locales
 
-
 ---
 
 ## 🚀 Scripts disponibles
 
-| Script | Acción |
-|:-------|:-------|
-| `npm run dev` | Ejecuta el servidor en desarrollo (`ts-node-dev`) |
-| `npm run build` | Compila TypeScript a `/dist` |
-| `npm run start` | Ejecuta servidor desde `/dist` |
-| `npm run test` | Ejecuta pruebas automáticas usando Redis Mock |
+| Script          | Acción                                            |
+| :-------------- | :------------------------------------------------ |
+| `npm run dev`   | Ejecuta el servidor en desarrollo (`ts-node-dev`) |
+| `npm run build` | Compila TypeScript a `/dist`                      |
+| `npm run start` | Ejecuta servidor desde `/dist`                    |
+| `npm run test`  | Ejecuta pruebas automáticas usando Redis Mock     |
 
 ---
 
@@ -63,6 +62,7 @@ Este proyecto implementa pruebas automáticas que cubren:
 - Consulta de reportes y métricas
 
 **Notas:**
+
 - En ambiente de testing (`NODE_ENV=test`) se usa `ioredis-mock` para Redis.
 - No es necesario levantar servicios externos reales para correr los tests.
 
@@ -101,7 +101,6 @@ WS_URL=http://localhost:3000
 
 ```
 
-
 ---
 
 ## 📦 Estructura del Proyecto
@@ -126,18 +125,19 @@ src/
 ```
 
 ---
+
 ## 📡 Principales Endpoints de la API
 
-| Método | Endpoint | Descripción | Requiere Token |
-|:-------|:---------|:------------|:--------------|
-| `POST` | `/api/auth/register` | Registro de nuevos usuarios | ❌ No |
-| `POST` | `/api/auth/login` | Autenticación de usuarios, devuelve token JWT | ❌ No |
-| `POST` | `/api/orders` | Creación de nuevas órdenes de envío | ✅ Sí |
-| `PUT` | `/api/orders/:id/status` | Actualización del estado de una orden | ✅ Sí |
-| `POST` | `/api/orders/assign` | Asignar orden a transportista disponible (solo admins) | ✅ Sí |
-| `GET` | `/api/reportes/envios` | Consulta avanzada de envíos con filtros (solo admins) | ✅ Sí |
-| `GET` | `/api/reportes/envios/metricas` | Consulta de métricas logísticas (solo admins) | ✅ Sí |
-| `WebSocket` | `/ws` | Seguimiento en tiempo real del estado de órdenes (token obligatorio en conexión) | ✅ Sí |
+| Método      | Endpoint                        | Descripción                                                                      | Requiere Token |
+| :---------- | :------------------------------ | :------------------------------------------------------------------------------- | :------------- |
+| `POST`      | `/api/auth/register`            | Registro de nuevos usuarios                                                      | ❌ No          |
+| `POST`      | `/api/auth/login`               | Autenticación de usuarios, devuelve token JWT                                    | ❌ No          |
+| `POST`      | `/api/orders`                   | Creación de nuevas órdenes de envío                                              | ✅ Sí          |
+| `PUT`       | `/api/orders/:id/status`        | Actualización del estado de una orden                                            | ✅ Sí          |
+| `POST`      | `/api/orders/assign`            | Asignar orden a transportista disponible (solo admins)                           | ✅ Sí          |
+| `GET`       | `/api/reportes/envios`          | Consulta avanzada de envíos con filtros (solo admins)                            | ✅ Sí          |
+| `GET`       | `/api/reportes/envios/metricas` | Consulta de métricas logísticas (solo admins)                                    | ✅ Sí          |
+| `WebSocket` | `/ws`                           | Seguimiento en tiempo real del estado de órdenes (token obligatorio en conexión) | ✅ Sí          |
 
 ---
 
@@ -151,3 +151,8 @@ src/
 - **Pruebas unitarias e integración** de todos los flujos principales.
 
 ---
+
+## 📹 Video de Demostración
+
+https://youtu.be/8lEvdT1dGX0
+_(El video debe mostrar al candidato explicando y demostrando la solución en máximo 10 minutos, apareciendo en un recuadro tipo tutorial.)_
