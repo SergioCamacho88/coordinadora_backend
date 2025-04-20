@@ -128,8 +128,6 @@ src/
 ---
 ## 📡 Principales Endpoints de la API
 
-## 📡 Principales Endpoints de la API
-
 | Método | Endpoint | Descripción | Requiere Token |
 |:-------|:---------|:------------|:--------------|
 | `POST` | `/api/auth/register` | Registro de nuevos usuarios | ❌ No |
